@@ -1,0 +1,40 @@
+grouping django
+
+from django.db.models import Count,Sum,Avg,Min,Miax
+
+#annotate is used for grouping
+
+category_summary=Task.objects.all().values("category").annotate(cat_count=Count("category"))  #cat_count is a variable
+
+#aggregate functions
+
+Sum()
+Min()    #all are classes
+Max()
+Avg()
+Count()
+
+example:
+#total expenses
+
+total=Expense.objects.all.values("amount).aggregate(Sum("amount"))
+
+
+#min Expense
+
+min_expense=Expense.objects.all.values("amount").aggregate(Min("amount"))
+
+
+#total payment in cash and upi
+
+here a cash column is there for the mode of payment
+
+payment_summary=Expense.objects.all().values("payment").annotate(Sum("amount"))
+
+
+
+
+
+
+
+
