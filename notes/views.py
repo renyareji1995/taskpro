@@ -16,6 +16,8 @@ from django.db.models import Count
 
 from django.contrib.auth.models import User
 
+from django.contrib.auth import authenticate,login,logout
+
 # Create your views here.
 
 class TaskCreateView(View):
@@ -38,6 +40,8 @@ class TaskCreateView(View):
             # Task.objects.create(**data) #unpacking data dictionary
 
             #instead of this,we can use,
+
+            form_instance.instance.user=request.user
 
             form_instance.save()  #for update,instance is passed intio the save().if not,create function will works.
 
@@ -252,6 +256,47 @@ class SignInView(View):
         form_instance=SignInForm()
 
         return render(request,self.template_name,{"form":form_instance})   
+    
+    def post(self,request,*args,**kwargs):
+
+        #initialize form with request.POST
+
+        form_instance=SignInForm(request.POST)
+
+        #check form_instance is valid
+
+        if form_instance.is_valid():
+
+            #extract username,password
+
+            uname=form_instance.cleaned_data.get("username")
+
+            pwd=form_instance.cleaned_data.get("password")
+
+            #authenticate
+
+            user_object=authenticate(request,username=uname,password=pwd)
+
+            if user_object:
+
+                login(request,user_object)
+
+                return redirect("task-list")
+            
+        return render(request,self.template_name,{"form":form_instance})
+    
+
+class SignOutView(View):
+
+    def get(self,request,*args,**kwargs):
+
+        #remove user session
+        logout(request)
+
+        return redirect("signin")
+
+    
+    
 
 
      

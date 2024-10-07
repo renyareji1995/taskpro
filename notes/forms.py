@@ -12,7 +12,7 @@ class TaskForm(forms.ModelForm):
 
         # fields=["title","description",...]
 
-        exclude=("created_date","status","updated_date")
+        exclude=("created_date","status","updated_date","user")
 
         #styling django modelform
         widgets={
@@ -25,7 +25,6 @@ class TaskForm(forms.ModelForm):
 
             "category":forms.Select(attrs={"class":"form-control form-select"}),
 
-            "user":forms.TextInput(attrs={"class":"form-control"})
         }
 
 
@@ -41,7 +40,7 @@ class RegistrationForm(forms.ModelForm):
         widgets={
             "username":forms.TextInput(attrs={"class":"form-control"}),
             "email":forms.TextInput(attrs={"class":"form-control"}),
-            "password":forms.TextInput(attrs={"class":"form-control"})
+            "password":forms.PasswordInput(attrs={"class":"form-control"})
             
         }
 
