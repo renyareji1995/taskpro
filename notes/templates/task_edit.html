@@ -2,21 +2,28 @@
 
 {%block main_block%}
 
-<div class="container"></div>
+<div class="container">
 
-       
-    <div class="row">
-        <div class="col-3"></div>
-        <div class="col-6">
-            <form action="" method="POST">
-                {%csrf_token%}
-                {{form}}
-                <br>
-                <button type="submit" class="btn btn-info form-control">Update</button>
-            </form>       
+    <div class="card mb-3" style="max-width: 540px;">
+        <div class="row g-0">
+          <div class="col-md-8">
+            <div class="card-body">
+
+                <form action="" method="POST" style="width: 50rem;height:auto;margin-top: 100px;" class="bg-secondary p-5">
+                    <h1 class="text-center">Edit Task</h1>
+                    {%csrf_token%}
+                    {{form}}
+                    <br>
+                    <button type="submit" class="btn btn-primary" style="width: 10rem;">Update</button>
+                </form>       
+              
+            </div>
+          </div>
         </div>
-        <div class="col-3"></div>
-    </div>
+      </div>
+    
+            
+       
 </div>
 
 {%endblock%}

@@ -1,0 +1,22 @@
+
+
+
+<!--Register-->
+
+<body class="bg-danger">
+  <div class="container mt-5">
+          <div class="row mt-5">
+              <div class="col-3"></div>
+              <div class="col-6 d-flex justify-content-center">
+                  <form action="" method="POST" style="width: 50rem;height:25rem;margin-top: 100px;" class="bg-secondary p-5">
+                      <h1 class="text-center">Registration Form</h1>
+                      {%csrf_token%}
+                      {{form}}
+                      <br>
+                      <button type="submit" class="btn btn-primary" style="width: 10rem;margin-left: 200px;">Register</button>
+                  </form>
+              </div>
+              <div class="col-3"></div>
+          </div>
+
+<!--Task Create-->

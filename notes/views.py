@@ -18,8 +18,16 @@ from django.contrib.auth.models import User
 
 from django.contrib.auth import authenticate,login,logout
 
-# Create your views here.
+from notes.decorators import signin_required
 
+from django.utils.decorators import method_decorator
+
+from django.views.decorators.cache import never_cache
+
+# decorators are used to add a feature without changing the functions
+
+decs=[signin_required,never_cache]
+@method_decorator(decs,name="dispatch")
 class TaskCreateView(View):
 
     def get(self,request,*args,**kwargs):
@@ -41,7 +49,7 @@ class TaskCreateView(View):
 
             #instead of this,we can use,
 
-            form_instance.instance.user=request.user
+            form_instance.instance.user=request.user #here we create instance for save user in Task model
 
             form_instance.save()  #for update,instance is passed intio the save().if not,create function will works.
 
@@ -57,7 +65,8 @@ class TaskCreateView(View):
         
 
 #task list view
-
+decs=[signin_required,never_cache]
+@method_decorator(decs,name="dispatch")
 class TaskListView(View):
 
     def get(self,request,*args,**kwargs):
@@ -70,15 +79,16 @@ class TaskListView(View):
 
         if selected_category == "all":
 
-            qs=Task.objects.all()
+            qs=Task.objects.filter(user=request.user)
 
         else:
 
-            qs=Task.objects.filter(category=selected_category)
+            qs=Task.objects.filter(category=selected_category,user=request.user)
 
         if search_text!=None:
 
-            qs=Task.objects.filter(
+            qs=Task.objects.filter(user=request.user)
+            qs=qs.filter(
                                     Q(title__icontains=search_text)|       #icontains---search caseinsesitive
                                     Q(description__icontains=search_text)
                                     )
@@ -86,7 +96,8 @@ class TaskListView(View):
         return render(request,"task_list.html",{"tasks":qs,"selected":selected_category})
 
 #task detail view
-
+decs=[signin_required,never_cache]
+@method_decorator(decs,name="dispatch")
 class TaskDetailView(View):
 
     def get(self,request,*args,**kwargs):
@@ -101,7 +112,8 @@ class TaskDetailView(View):
 
         return render(request,"task_details.html",{"task":qs})
 
-
+decs=[signin_required,never_cache]
+@method_decorator(decs,name="dispatch")
 class TaskUpdateView(View):
 
     def get(self,request,*args,**kwargs):
@@ -181,8 +193,8 @@ class TaskUpdateView(View):
 
 
 
-        
-
+decs=[signin_required,never_cache]
+@method_decorator(decs,name="dispatch")
 class TaskDeleteView(View):
 
     def get(self,request,*args,**kwargs):
@@ -193,7 +205,8 @@ class TaskDeleteView(View):
         return redirect('task-list')
 
 
-
+decs=[signin_required,never_cache]
+@method_decorator(decs,name="dispatch")
 class TaskSummaryView(View):
 
     def get(self,request,*args,**kwargs):
@@ -216,7 +229,7 @@ class TaskSummaryView(View):
 
         }
 
-        return render(request,"task_summary.html",context)
+        return render(request,"dashboard.html",context)
     
 
 class SignUpView(View):
@@ -285,7 +298,8 @@ class SignInView(View):
             
         return render(request,self.template_name,{"form":form_instance})
     
-
+decs=[signin_required,never_cache]
+@method_decorator(decs,name="dispatch")
 class SignOutView(View):
 
     def get(self,request,*args,**kwargs):
@@ -294,6 +308,16 @@ class SignOutView(View):
         logout(request)
 
         return redirect("signin")
+    
+
+
+class DashboardView(View):
+
+    template_name="dashboard.html"
+
+    def get(self,request,*args,**kwargs):
+
+        return render(request,self.template_name)
 
     
     
