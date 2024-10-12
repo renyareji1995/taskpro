@@ -4,8 +4,8 @@
 
 
 <div class="container my-3">
-    <div class="w-50 mx-auto">
-        <form action="">
+    <div class="w-50 mx-auto d-flex justify-content-between">
+        <form action="" style="width: 50%;height: 30px;">
             <select name="category" id="" class="form-select" onchange="this.form.submit()">
                 <option value="all" {%if selected == 'all' %} selected {%endif%}>all</option>
                 <option value="personal"{%if selected == 'personal'%} selected {%endif%}>personal</option>
@@ -13,8 +13,8 @@
             </select>
             
         </form>
-        <br>
-        <form action="">
+        
+        <form action="" style="width: 70%; height: 30px;padding-left: 100px;">
             <input type="text" placeholder="enter key word" name="search_text">
             <button type="submit">search</button>
         </form>

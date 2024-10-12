@@ -27,6 +27,7 @@ from django.views.decorators.cache import never_cache
 # decorators are used to add a feature without changing the functions
 
 decs=[signin_required,never_cache]
+
 @method_decorator(decs,name="dispatch")
 class TaskCreateView(View):
 
@@ -65,7 +66,7 @@ class TaskCreateView(View):
         
 
 #task list view
-decs=[signin_required,never_cache]
+
 @method_decorator(decs,name="dispatch")
 class TaskListView(View):
 
@@ -112,7 +113,7 @@ class TaskDetailView(View):
 
         return render(request,"task_details.html",{"task":qs})
 
-decs=[signin_required,never_cache]
+
 @method_decorator(decs,name="dispatch")
 class TaskUpdateView(View):
 
@@ -193,7 +194,7 @@ class TaskUpdateView(View):
 
 
 
-decs=[signin_required,never_cache]
+
 @method_decorator(decs,name="dispatch")
 class TaskDeleteView(View):
 
@@ -204,21 +205,19 @@ class TaskDeleteView(View):
 
         return redirect('task-list')
 
-
-decs=[signin_required,never_cache]
 @method_decorator(decs,name="dispatch")
 class TaskSummaryView(View):
 
     def get(self,request,*args,**kwargs):
 
-        qs=Task.objects.all()
+        qs=Task.objects.filter(user=request.user)
 
         total_task_count=qs.count()
 
-        category_summary=Task.objects.values("category").annotate(cat_count=Count("category"))
+        category_summary=qs.values("category").annotate(cat_count=Count("category"))
         print(category_summary)
 
-        status_summary=Task.objects.values("status").annotate(stat_count=Count("status"))
+        status_summary=qs.values("status").annotate(stat_count=Count("status"))
         print(status_summary)
 
         context={
@@ -298,7 +297,7 @@ class SignInView(View):
             
         return render(request,self.template_name,{"form":form_instance})
     
-decs=[signin_required,never_cache]
+
 @method_decorator(decs,name="dispatch")
 class SignOutView(View):
 
